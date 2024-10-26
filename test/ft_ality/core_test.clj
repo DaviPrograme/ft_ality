@@ -103,3 +103,17 @@
       (is (= expected1 (map-commands (get-content-file "./test/ft_ality/helpers/map-commands/correct3.grm")))))
     (testing "testando com um arquivo que o nome do golpe é composto por duas palavras separada com espaços"
       (is (= expected2 (map-commands (get-content-file "./test/ft_ality/helpers/map-commands/correct4.grm")))))))
+
+(defn- equal-nodes? [nodeA nodeB]
+  (and (= (:key nodeA) (:key  nodeB)) (= (:special nodeA) @(:special  nodeB)) (=  (:branches nodeA) @(:branches  nodeB))))
+
+(deftest create-node-test 
+  (let [expected1 {:key "A" :special nil :branches {}} result1 (create-node "A" nil)
+        expected2 {:key "B" :special "nome do golpe especial" :branches {}} result2 (create-node "B" "nome do golpe especial")
+        expected3 {:key nil :special nil :branches {}} result3 (create-node nil nil)]
+    (testing "testando passando a tecla como string e special como nil"
+      (is (equal-nodes? expected1 result1)))
+    (testing "testando passando a tecla como string e special como string"
+      (is (equal-nodes? expected2 result2)))
+    (testing "testando passando a tecla como nil e special como nil"
+      (is (equal-nodes? expected3 result3)))))
