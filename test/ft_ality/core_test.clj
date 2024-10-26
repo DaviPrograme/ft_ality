@@ -2,6 +2,7 @@
   (:require [clojure.test :refer :all]
             [ft-ality.main :refer :all]
             [helpers.file :refer :all]
+            [helpers.tree :refer :all]
             [helpers.validator :refer [is-section-separator-valid?,
               is-section-commands-valid?
               is-section-combos-valid?]]))
@@ -90,3 +91,15 @@
       (is (= false (is-section-combos-valid? (get-content-file "./test/ft_ality/helpers/combos/error4.grm") false))))
     (testing "testando com um arquivo que um dos combos tem um goolpe nao menciionado na seção de comandos"
       (is (= false (is-section-combos-valid? (get-content-file "./test/ft_ality/helpers/combos/error5.grm") false)))))
+
+(deftest map-commands-test
+  (let [expected1 {"1" "UM" "2" "DOIS" "3" "TRES"}
+        expected2 {"1" "UM" "2" "DOIS" "3" "42 SP"}]
+    (testing "testando com o arquivo padrão"
+      (is (= expected1 (map-commands (get-content-file "./test/ft_ality/helpers/map-commands/correct1.grm")))))
+    (testing "testando com um arquivo que tem espaços iinserridos no conteudo maas nao deve alterar o resultado"
+      (is (= expected1 (map-commands (get-content-file "./test/ft_ality/helpers/map-commands/correct2.grm")))))
+    (testing "testando com arquivo que mescla entre maiusculas e minusculas"
+      (is (= expected1 (map-commands (get-content-file "./test/ft_ality/helpers/map-commands/correct3.grm")))))
+    (testing "testando com um arquivo que o nome do golpe é composto por duas palavras separada com espaços"
+      (is (= expected2 (map-commands (get-content-file "./test/ft_ality/helpers/map-commands/correct4.grm")))))))
