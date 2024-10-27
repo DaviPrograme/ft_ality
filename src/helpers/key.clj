@@ -1,11 +1,11 @@
 (ns helpers.key
+  (:require [helpers.defs :refer [commands]])
   (:import [javax.swing JFrame JPanel]
            [java.awt.event KeyAdapter KeyEvent]
            [javax.sound.sampled AudioSystem Clip FloatControl]
            [java.io File]
            [java.awt Graphics Toolkit]))
 
-(def commands (atom []))
 
 (defn print-commands [commands]
   (doseq [cmd @commands]
