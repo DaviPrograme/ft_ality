@@ -117,3 +117,21 @@
       (is (equal-nodes? expected2 result2)))
     (testing "testando passando a tecla como nil e special como nil"
       (is (equal-nodes? expected3 result3)))))
+
+
+(defn- equal-nodes2? [nodeA nodeB]
+  (and (= (:key nodeA) (:key  nodeB)) (= @(:special nodeA) @(:special  nodeB)) (=  @(:branches nodeA) @(:branches  nodeB))))
+
+
+(deftest insert-branche-into-node-test 
+  (let [node (create-node "A" nil)
+        nodeB (create-node "B" nil)
+        nodeC (create-node "C" nil)]
+    (testing "testando com um node que não tem branches"
+      (is (empty? @(:branches node))))
+    (testing "testando inserindo um nó"
+      (insert-branche-into-node node nodeB)
+      (is (and (not (empty? @(:branches node))) (contains? @(:branches node) "B") (equal-nodes2? (get @(:branches node) "B") nodeB))))
+    (testing "testando inserindo um outro nó"
+      (insert-branche-into-node node nodeC)
+      (is (and (not (empty? @(:branches node))) (contains? @(:branches node) "C") (equal-nodes2? (get @(:branches node) "C") nodeC))))))
