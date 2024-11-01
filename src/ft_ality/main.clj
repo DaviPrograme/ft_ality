@@ -10,7 +10,6 @@
   "I don't do a whole lot ... yet."
   [& args]
   (if (= 1 (count args)) 
-    (when (not (nil? (check-path (last args))))
-      (create-frame)
-      (is-file-grammar-valid? (last args)))
+    (when (and (not (nil? (check-path (last args)))) (is-file-grammar-valid? (last args)))
+      (create-frame))
     (print "quantiidade de parametros errada")))
