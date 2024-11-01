@@ -3,6 +3,7 @@
             [ft-ality.main :refer :all]
             [helpers.file :refer :all]
             [helpers.tree :refer :all]
+            [helpers.monitor :refer :all]
             [helpers.validator :refer [is-section-separator-valid?,
               is-section-commands-valid?
               is-section-combos-valid?]]))
@@ -135,3 +136,15 @@
     (testing "testando inserindo um outro nó"
       (insert-branche-into-node node nodeC)
       (is (and (not (empty? @(:branches node))) (contains? @(:branches node) "C") (equal-nodes2? (get @(:branches node) "C") nodeC))))))
+
+(deftest all-commnds-part-sequence?-test
+  (let [time 1
+        test1 []
+        test2 [{:time 1} {:time 2}{:time 3}{:time 4}{:time 5}{:time 6}{:time 7}{:time 8}{:time 9}]
+        test3 [{:time 1} {:time 2}{:time 3}{:time 4}{:time 5}{:time 6}{:time 7}{:time 9}{:time 10}]]
+    (testing "com uma lista vazia de comandos"
+      (is (= true (all-commnds-part-sequence? test1 time))))
+    (testing "com uma lista que todos os comandos fazem parte da sequencia"
+      (is (= true (all-commnds-part-sequence? test2 time))))
+    (testing "com uma lista que nem todos os comandos fazem parte da sequencia"
+      (is (= false (all-commnds-part-sequence? test3 time))))))
