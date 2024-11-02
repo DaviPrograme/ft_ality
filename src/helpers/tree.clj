@@ -17,3 +17,8 @@
     (let [keys (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 0)
           strokes (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 1)]
         (zipmap keys strokes)))
+
+(defn strokes-commands-map [content]
+    (let [keys (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 0)
+          strokes (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 1)]
+        (zipmap strokes keys)))

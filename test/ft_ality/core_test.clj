@@ -105,6 +105,20 @@
     (testing "testando com um arquivo que o nome do golpe é composto por duas palavras separada com espaços"
       (is (= expected2 (keys-commands-map (get-content-file "./test/ft_ality/helpers/keys-commands-map/correct4.grm")))))))
 
+
+(deftest strokes-commands-map-test
+  (let [expected1 {"UM" "1" "DOIS" "2" "TRES" "3"}
+        expected2 {"UM" "1" "DOIS" "2" "42 SP" "3"}]
+    (testing "testando com o arquivo padrão"
+      (is (= expected1 (strokes-commands-map (get-content-file "./test/ft_ality/helpers/keys-commands-map/correct1.grm")))))
+    (testing "testando com um arquivo que tem espaços iinserridos no conteudo maas nao deve alterar o resultado"
+      (is (= expected1 (strokes-commands-map(get-content-file "./test/ft_ality/helpers/keys-commands-map/correct2.grm")))))
+    (testing "testando com arquivo que mescla entre maiusculas e minusculas"
+      (is (= expected1 (strokes-commands-map (get-content-file "./test/ft_ality/helpers/keys-commands-map/correct3.grm")))))
+    (testing "testando com um arquivo que o nome do golpe é composto por duas palavras separada com espaços"
+      (is (= expected2 (strokes-commands-map (get-content-file "./test/ft_ality/helpers/keys-commands-map/correct4.grm")))))))
+
+
 (defn- equal-nodes? [nodeA nodeB]
   (and (= (:key nodeA) (:key  nodeB)) (= (:special nodeA) @(:special  nodeB)) (=  (:branches nodeA) @(:branches  nodeB))))
 
