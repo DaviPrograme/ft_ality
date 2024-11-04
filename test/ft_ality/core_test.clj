@@ -162,3 +162,40 @@
       (is (= true (all-commnds-part-sequence? test2 time))))
     (testing "com uma lista que nem todos os comandos fazem parte da sequencia"
       (is (= false (all-commnds-part-sequence? test3 time))))))
+
+
+(deftest filter-empty-string-test
+  (let [test1 []
+        test2 ["1" "2" "3"]
+        test3 ["1" "" "2" "3"]
+        expected ["1" "2" "3"]]
+    (testing "com uma lista vazia" (is (= [] (filter-empty-string test1))))
+    (testing "com uma lista de string onde nenhuma é vazia" (is (= expected (filter-empty-string test2))))
+    (testing "com uma lista de string onde um elemento é vazio" (is (= expected (filter-empty-string test3))))))
+
+
+(deftest treat-combined-strike-test
+  (let [test1 "4+2+s+p"
+        test2 "4++2++s++p"
+        test3 "42sp"
+        expected1 #{"4", "2", "s", "p"}
+        expected2 #{"4", "2", "s", "p"}
+        expected3 #{"42sp"}]
+    (testing "com uma  lista de comandos normal" (is (= expected1 (treat-combined-strike test1))))
+    (testing "com uma lista de comandos com o sinal + a mais que o devido" (is (= expected2 (treat-combined-strike test2))))
+    (testing "com uma lista de comandos com apenas um comando" (is (= expected3 (treat-combined-strike test3))))))
+
+
+(deftest build-combo-map-test
+  (let [test1 "Uppercut-Down+Back Punch"
+        test2 "Uppercut-Left,Left,Front Punch"
+        test3 "Uppercut-Down+Back Punch,Left,Left,Front Punch"
+        test4 "   Uppercut     -    Down   +   Back    Punch , Left , Left ,  Front      Punch       "
+        expected1 {:name "UPPERCUT" :list [#{"DOWN" "BACK PUNCH"}]}
+        expected2 {:name "UPPERCUT" :list ["LEFT" "LEFT" "FRONT PUNCH"]}
+        expected3 {:name "UPPERCUT" :list [#{"DOWN" "BACK PUNCH"} "LEFT" "LEFT" "FRONT PUNCH"]}
+        expected4 {:name "UPPERCUT" :list [#{"DOWN" "BACK PUNCH"} "LEFT" "LEFT" "FRONT PUNCH"]}]
+    (testing "com um golpes acionados ao mesmo tempo" (is (= expected1 (build-combo-map test1))))
+    (testing "com um golpes acionados de forma sequencial" (is (= expected2 (build-combo-map test2))))
+    (testing "com um golpes acionados ao mesmo tempo e sequencial" (is (= expected3 (build-combo-map test3))))
+    (testing "com um golpes acionados ao mesmo tempo e sequencial, com mais espaços na string" (is (= expected4 (build-combo-map test4))))))

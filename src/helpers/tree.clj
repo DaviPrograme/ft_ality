@@ -24,18 +24,19 @@
           strokes (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 1)]
         (zipmap strokes keys)))
 
-(defn- filter-empty-string [list]
+(defn filter-empty-string [list]
     (filter seq list))
 
-(defn- treat-combined-strike [strike]
-    (set (filter-empty-string  (str/split strike #"+"))))
+(defn treat-combined-strike [strike]
+    (set (filter-empty-string  (str/split strike #"\+"))))
 
 (defn build-combo-map [combo]
-    (let [name-combo  (normalize-spaces (get-part-list combo 0))
-          combo-stroke  (map #(if (str/includes? % "+") (treat-combined-strike %) %) (filter-empty-string (str/split (normalize-spaces (get-part-list combo 1)) #",")))]
-          combo-stroke))
+    (let [name-combo  (normalize-spaces (nth (get-part-list [combo] 0) 0))
+          combo-stroke (doall (map #(if (str/includes? % "+") (treat-combined-strike %) %) (filter-empty-string (str/split (normalize-spaces(nth (get-part-list [combo] 1) 0)) #","))))]
+        {:name name-combo :list combo-stroke}))
 
 (defn build-tree [content]
     (let [combos-list (remove-empty-lines (nth (get-sections content) 1))
+          combos-map (map build-combo-map combos-list)
           strokes-map (strokes-commands-map content)]
-        (println (nth combos-list 0))))
+        (println (nth combos-map 0) )))
