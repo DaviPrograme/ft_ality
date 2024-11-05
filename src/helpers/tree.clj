@@ -52,12 +52,7 @@
 
 (defn build-tree [content]
     (let [combos-list (remove-empty-lines (nth (get-sections content) 1))
-          strokes-map (strokes-commands-map content)
           combos-map (map build-combo-map combos-list)
-          combo-root (first combos-map)
-          rest-combos-map (rest combos-map)
-          combo-name-root (:name  combo-root)
-          combo-list-root (translate-strikes-to-keys strokes-map (:list  combo-root))
-          combo-rest-root (rest combo-list-root)]
+          strokes-map (strokes-commands-map content)]
         (reset! combos-tree (create-node "root tree" "root tree"))
         (run! #(add-node-tree @combos-tree (:name %) (translate-strikes-to-keys strokes-map (:list %)) ) combos-map)))
