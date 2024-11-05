@@ -1,6 +1,7 @@
 (ns helpers.tree 
     (:require 
         [helpers.aux :refer [get-sections remove-empty-lines get-part-list normalize-spaces]]
+        [helpers.defs :refer [combos-tree]]
         [clojure.string :as str]))
 
 
@@ -35,8 +36,28 @@
           combo-stroke (doall (map #(if (str/includes? % "+") (treat-combined-strike %) %) (filter-empty-string (str/split (normalize-spaces(nth (get-part-list [combo] 1) 0)) #","))))]
         {:name name-combo :list combo-stroke}))
 
+(defn add-node-tree [node combo-name strikes-list]
+    (let [strike-now (first strikes-list)
+          rest-strikes-list (rest strikes-list)
+          new-node (create-node strike-now nil)]
+        (when (not (contains? @(:branches node) strike-now ))
+            (insert-branche-into-node node new-node))
+        (when (empty? rest-strikes-list)
+            (reset! (:special (get @(:branches node) strike-now)) combo-name))
+        (when (not (empty? rest-strikes-list))
+            (recur (get @(:branches node) strike-now) combo-name rest-strikes-list))))
+
+(defn translate-strikes-to-keys [strikes-map strikes-list]
+    (doall (map (fn [x] (if (set? x) (set (map #(get strikes-map %) x)) (get strikes-map x))) strikes-list)))
+
 (defn build-tree [content]
     (let [combos-list (remove-empty-lines (nth (get-sections content) 1))
+          strokes-map (strokes-commands-map content)
           combos-map (map build-combo-map combos-list)
-          strokes-map (strokes-commands-map content)]
-        (println (nth combos-map 0) )))
+          combo-root (first combos-map)
+          rest-combos-map (rest combos-map)
+          combo-name-root (:name  combo-root)
+          combo-list-root (translate-strikes-to-keys strokes-map (:list  combo-root))
+          combo-rest-root (rest combo-list-root)]
+        (reset! combos-tree (create-node "root tree" "root tree"))
+        (run! #(add-node-tree @combos-tree (:name %) (translate-strikes-to-keys strokes-map (:list %)) ) combos-map)))
