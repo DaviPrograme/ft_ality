@@ -73,9 +73,9 @@
             false))))
 
 
-(defn repeated-strokes? [strokes, print-error?]
-    (let [set-strokes (set strokes)]
-        (if (= (count strokes) (count set-strokes))
+(defn repeated-strikes? [strikes, print-error?]
+    (let [set-strikes (set strikes)]
+        (if (= (count strikes) (count set-strikes))
             true
             (do (when print-error?
                 (print "um golpe só pode ser executado por apenas uma tecla"))
@@ -85,14 +85,14 @@
     (let [section-commands (nth (get-sections content) 0)
          lines-with-content-list (remove-empty-lines section-commands)
          keys-list (get-part-list lines-with-content-list 0)
-         strokes-list (get-part-list lines-with-content-list 1)]
+         strikes-list (get-part-list lines-with-content-list 1)]
          (and
             (empty-command-section-error? section-commands, print-error?) 
             (command-section-no-content-error? lines-with-content-list print-error?)
             (all-lines-have-just-one-dash? lines-with-content-list print-error?)
             (keys-recognized? keys-list print-error?)
             (repeated-keys? keys-list print-error?)
-            (repeated-strokes? strokes-list print-error?))))
+            (repeated-strikes? strikes-list print-error?))))
 
 
 (defn all-combo-names-have-content? [lines, print-error?]
@@ -102,12 +102,12 @@
             false)
         true))
 
-(defn combos-to-strokes [combos]
+(defn combos-to-strikes [combos]
     (set (apply concat (map #(str/split % #"[,+]") combos))))
 
-(defn strokes-not-found-error [registered-strokes, strokes, print-error?]
-    (let [intersec (set/intersection strokes registered-strokes)
-         diff (set/difference strokes intersec)]
+(defn strikes-not-found-error [registered-strikes, strikes, print-error?]
+    (let [intersec (set/intersection strikes registered-strikes)
+         diff (set/difference strikes intersec)]
          (if (zero? (count diff))
             true
             (do (when print-error?
@@ -115,18 +115,18 @@
                 false))))
 
 (defn is-section-combos-valid? [content, print-error?]
-    (let [registered-strokes (set (get-part-list (remove-empty-lines (nth (get-sections content) 0 "")) 1))
+    (let [registered-strikes (set (get-part-list (remove-empty-lines (nth (get-sections content) 0 "")) 1))
          section-combos (nth (get-sections content) 1 "")
          lines-with-content-list (remove-empty-lines section-combos)
          combos-name (get-part-list lines-with-content-list 0)
          combos (get-part-list lines-with-content-list 1)
-         strokes (combos-to-strokes combos)]
+         strikes (combos-to-strikes combos)]
          (and
             (empty-command-section-error? section-combos, print-error?) 
             (command-section-no-content-error? lines-with-content-list print-error?)
             (all-lines-have-just-one-dash? lines-with-content-list print-error?)
             (all-combo-names-have-content? combos-name print-error?)
-            (strokes-not-found-error registered-strokes, strokes, print-error?))))
+            (strikes-not-found-error registered-strikes, strikes, print-error?))))
 
 (defn is-file-grammar-valid? [path]
     (let [content (get-content-file path)]

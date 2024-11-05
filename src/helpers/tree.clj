@@ -17,13 +17,13 @@
 
 (defn keys-commands-map [content]
     (let [keys (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 0)
-          strokes (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 1)]
-        (zipmap keys strokes)))
+          strikes (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 1)]
+        (zipmap keys strikes)))
 
-(defn strokes-commands-map [content]
+(defn strikes-commands-map [content]
     (let [keys (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 0)
-          strokes (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 1)]
-        (zipmap strokes keys)))
+          strikes (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 1)]
+        (zipmap strikes keys)))
 
 (defn filter-empty-string [list]
     (filter seq list))
@@ -53,6 +53,6 @@
 (defn build-tree [content]
     (let [combos-list (remove-empty-lines (nth (get-sections content) 1))
           combos-map (map build-combo-map combos-list)
-          strokes-map (strokes-commands-map content)]
+          strikes-map (strikes-commands-map content)]
         (reset! combos-tree (create-node "root tree" "root tree"))
-        (run! #(add-node-tree @combos-tree (:name %) (translate-strikes-to-keys strokes-map (:list %)) ) combos-map)))
+        (run! #(add-node-tree @combos-tree (:name %) (translate-strikes-to-keys strikes-map (:list %)) ) combos-map)))
