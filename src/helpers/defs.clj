@@ -5,4 +5,6 @@
 
 (def combos-tree (atom nil))
 
+(def is-run? (atom true))
+
 (def mls-sequence-time 400)

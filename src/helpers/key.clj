@@ -1,5 +1,5 @@
 (ns helpers.key
-  (:require [helpers.defs :refer [commands]])
+  (:require [helpers.defs :refer [commands is-run?]])
   (:import [javax.swing JFrame JPanel]
            [java.awt.event KeyAdapter KeyEvent]
            [javax.sound.sampled AudioSystem Clip FloatControl]
@@ -35,7 +35,8 @@
         (print-commands commands)
         (when (= key-code KeyEvent/VK_ESCAPE)
           (println "Saindo...")
-          (.dispose frame)))) ;; Acesso ao frame aqui
+          (.dispose frame)
+          (reset! is-run? false)))) ;; Acesso ao frame aqui
     (keyReleased [e]
       (let [key-code (.getKeyCode e)]
         (println "Tecla liberada:" (KeyEvent/getKeyText key-code))))))

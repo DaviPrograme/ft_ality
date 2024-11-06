@@ -201,7 +201,7 @@
     (testing "com um golpes acionados ao mesmo tempo e sequencial, com mais espaços na string" (is (= expected4 (build-combo-map test4))))))
 
 
-(deftest get-end-index-sequence-test
+(deftest count-commands-next-sequence-test
   (let [seq-time 1
         test1 [{:time 1}]
         test2 [{:time 1}{:time 3}]
@@ -210,18 +210,18 @@
         test5 [{:time 1}{:time 2}{:time 3}{:time 4}{:time 5}{:time 7}{:time 8}{:time 9}]
         test6 [{:time 1} {:time 2}{:time 3}{:time 4}{:time 5}{:time 6}{:time 7}{:time 8}{:time 10}]
         test7 [{:time 1} {:time 2}{:time 3}{:time 4}{:time 5}{:time 6}{:time 7}{:time 8}{:time 9}]
-        expected1 0
-        expected2 0
-        expected3 1
-        expected4 0
-        expected5 4
-        expected6 7
-        expected7 8]
-    (testing "com apenas um elemento" (is (= expected1 (get-end-index-sequence 0 test1 seq-time))))
-    (testing "com dois elementos sendo que o segundo não faz parte da sequencia" (is (= expected2 (get-end-index-sequence 0 test2 seq-time))))
-    (testing "com dois elementos sendo que todos fazem parte da sequencia" (is (= expected3 (get-end-index-sequence 0 test3 seq-time))))
-    (testing "com oito elementos sendo que o segundo não faz parte da sequencia" (is (= expected4 (get-end-index-sequence 0 test4 seq-time))))
-    (testing "com oito elementos sendo que um elemento do meio nao faz parte da sequencia" (is (= expected5 (get-end-index-sequence 0 test5 seq-time))))
-    (testing "com nove elementos sendo que o elemento final nao faz parte da sequencia" (is (= expected6 (get-end-index-sequence 0 test6 seq-time))))
-    (testing "com nove elementos sendo que todos fazem parte da sequencia" (is (= expected7 (get-end-index-sequence 0 test7 seq-time))))
+        expected1 1
+        expected2 1
+        expected3 2
+        expected4 1
+        expected5 5
+        expected6 8
+        expected7 9]
+    (testing "com apenas um elemento" (is (= expected1 (count-commands-next-sequence 0 test1 seq-time))))
+    (testing "com dois elementos sendo que o segundo não faz parte da sequencia" (is (= expected2 (count-commands-next-sequence 0 test2 seq-time))))
+    (testing "com dois elementos sendo que todos fazem parte da sequencia" (is (= expected3 (count-commands-next-sequence 0 test3 seq-time))))
+    (testing "com oito elementos sendo que o segundo não faz parte da sequencia" (is (= expected4 (count-commands-next-sequence 0 test4 seq-time))))
+    (testing "com oito elementos sendo que um elemento do meio nao faz parte da sequencia" (is (= expected5 (count-commands-next-sequence 0 test5 seq-time))))
+    (testing "com nove elementos sendo que o elemento final nao faz parte da sequencia" (is (= expected6 (count-commands-next-sequence 0 test6 seq-time))))
+    (testing "com nove elementos sendo que todos fazem parte da sequencia" (is (= expected7 (count-commands-next-sequence 0 test7 seq-time))))
     ))
