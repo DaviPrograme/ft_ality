@@ -106,17 +106,17 @@
       (is (= expected2 (keys-commands-map (get-content-file "./test/ft_ality/helpers/keys-commands-map/correct4.grm")))))))
 
 
-(deftest strokes-commands-map-test
+(deftest strikes-commands-map-test
   (let [expected1 {"UM" "1" "DOIS" "2" "TRES" "3"}
         expected2 {"UM" "1" "DOIS" "2" "42 SP" "3"}]
     (testing "testando com o arquivo padrão"
-      (is (= expected1 (strokes-commands-map (get-content-file "./test/ft_ality/helpers/keys-commands-map/correct1.grm")))))
+      (is (= expected1 (strikes-commands-map (get-content-file "./test/ft_ality/helpers/keys-commands-map/correct1.grm")))))
     (testing "testando com um arquivo que tem espaços iinserridos no conteudo maas nao deve alterar o resultado"
-      (is (= expected1 (strokes-commands-map(get-content-file "./test/ft_ality/helpers/keys-commands-map/correct2.grm")))))
+      (is (= expected1 (strikes-commands-map(get-content-file "./test/ft_ality/helpers/keys-commands-map/correct2.grm")))))
     (testing "testando com arquivo que mescla entre maiusculas e minusculas"
-      (is (= expected1 (strokes-commands-map (get-content-file "./test/ft_ality/helpers/keys-commands-map/correct3.grm")))))
+      (is (= expected1 (strikes-commands-map (get-content-file "./test/ft_ality/helpers/keys-commands-map/correct3.grm")))))
     (testing "testando com um arquivo que o nome do golpe é composto por duas palavras separada com espaços"
-      (is (= expected2 (strokes-commands-map (get-content-file "./test/ft_ality/helpers/keys-commands-map/correct4.grm")))))))
+      (is (= expected2 (strikes-commands-map (get-content-file "./test/ft_ality/helpers/keys-commands-map/correct4.grm")))))))
 
 
 (defn- equal-nodes? [nodeA nodeB]
@@ -199,3 +199,29 @@
     (testing "com um golpes acionados de forma sequencial" (is (= expected2 (build-combo-map test2))))
     (testing "com um golpes acionados ao mesmo tempo e sequencial" (is (= expected3 (build-combo-map test3))))
     (testing "com um golpes acionados ao mesmo tempo e sequencial, com mais espaços na string" (is (= expected4 (build-combo-map test4))))))
+
+
+(deftest get-end-index-sequence-test
+  (let [seq-time 1
+        test1 [{:time 1}]
+        test2 [{:time 1}{:time 3}]
+        test3 [{:time 1}{:time 2}]
+        test4 [{:time 1}{:time 3}{:time 4}{:time 5}{:time 6}{:time 7}{:time 8}{:time 9}]
+        test5 [{:time 1}{:time 2}{:time 3}{:time 4}{:time 5}{:time 7}{:time 8}{:time 9}]
+        test6 [{:time 1} {:time 2}{:time 3}{:time 4}{:time 5}{:time 6}{:time 7}{:time 8}{:time 10}]
+        test7 [{:time 1} {:time 2}{:time 3}{:time 4}{:time 5}{:time 6}{:time 7}{:time 8}{:time 9}]
+        expected1 0
+        expected2 0
+        expected3 1
+        expected4 0
+        expected5 4
+        expected6 7
+        expected7 8]
+    (testing "com apenas um elemento" (is (= expected1 (get-end-index-sequence 0 test1 seq-time))))
+    (testing "com dois elementos sendo que o segundo não faz parte da sequencia" (is (= expected2 (get-end-index-sequence 0 test2 seq-time))))
+    (testing "com dois elementos sendo que todos fazem parte da sequencia" (is (= expected3 (get-end-index-sequence 0 test3 seq-time))))
+    (testing "com oito elementos sendo que o segundo não faz parte da sequencia" (is (= expected4 (get-end-index-sequence 0 test4 seq-time))))
+    (testing "com oito elementos sendo que um elemento do meio nao faz parte da sequencia" (is (= expected5 (get-end-index-sequence 0 test5 seq-time))))
+    (testing "com nove elementos sendo que o elemento final nao faz parte da sequencia" (is (= expected6 (get-end-index-sequence 0 test6 seq-time))))
+    (testing "com nove elementos sendo que todos fazem parte da sequencia" (is (= expected7 (get-end-index-sequence 0 test7 seq-time))))
+    ))
