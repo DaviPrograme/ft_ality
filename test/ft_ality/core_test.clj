@@ -226,3 +226,29 @@
     (testing "com nove elementos sendo que o elemento final nao faz parte da sequencia" (is (= expected6 (count-commands-next-sequence 0 test6 seq-time))))
     (testing "com nove elementos sendo que todos fazem parte da sequencia" (is (= expected7 (count-commands-next-sequence 0 test7 seq-time))))
     ))
+
+
+(deftest count-keys-pressed-same-time-test
+  (let [wait-time 1
+        key-focus {:time 0}
+        test0 []
+        test1 [{:time 2}]
+        test2 [{:time 1}]
+        test3 [{:time 0.1}{:time 0.2}{:time 0.3}{:time 0.9999999999999}{:time 1.00}{:time 1.00000000000001}{:time 2}{:time 3}{:time 4}{:time 5}]
+        test4 [{:time 0.1} {:time 0.2}{:time 0.3}{:time 0.4}{:time 0.5}{:time 0.6}{:time 0.7}{:time 0.8}{:time 0.9999999999999}{:time 1.0}{:time 1.00000000000001}]
+        test5 [{:time 0.1} {:time 0.2}{:time 0.3}{:time 0.4}{:time 0.5}{:time 0.6}{:time 0.7}{:time 0.8}{:time 0.9999999999998}{:time 1.0}{:time 0.9999999999999}]
+        expected0 0
+        expected1 0
+        expected2 1
+        expected3 5
+        expected4 10
+        expected5 11]
+    (testing "sem elementos na lista de comandos" (is (= expected0 (count-keys-pressed-same-time 0 key-focus test0 wait-time))))
+    (testing "com um elemento na lista mas que não foi pressionado juntamente" (is (= expected1 (count-keys-pressed-same-time 0 key-focus test1 wait-time))))
+    (testing "com um elemento na lista que foi pressionado juntamente" (is (= expected2 (count-keys-pressed-same-time 0 key-focus test2 wait-time))))
+    (testing "com dez elementos na lista mas apenas 5 foram pressionados em conjunto com a tecla foco" 
+      (is (= expected3 (count-keys-pressed-same-time 0 key-focus test3 wait-time))))
+    (testing "com dez elementos na lista mas apenas 1 não foi pressionado em conjunto com a tecla foco" 
+      (is (= expected4 (count-keys-pressed-same-time 0 key-focus test4 wait-time))))
+    (testing "com todos elementos da lista de comandos sendo pressionados juntos" (is (= expected5 (count-keys-pressed-same-time 0 key-focus test5 wait-time))))
+    ))

@@ -8,3 +8,5 @@
 (def is-run? (atom true))
 
 (def mls-sequence-time 400)
+
+(def key-waiting-time 100)

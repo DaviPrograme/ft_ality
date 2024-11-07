@@ -19,6 +19,10 @@
             (Thread/sleep seq-time)
             (recur cmds-now-list seq-time))))
 
+(defn count-keys-pressed-same-time [count key-focus keys-list time]
+    (if (or (empty? keys-list) (> (- (:time (first keys-list )) (:time key-focus)) time))
+        count
+        (recur (inc count) key-focus (drop 1 keys-list) time)))
 
 (defn monitor-commands []
     (while (or @is-run? (not (empty? @commands)))
