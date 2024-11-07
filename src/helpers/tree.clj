@@ -1,6 +1,6 @@
 (ns helpers.tree 
     (:require 
-        [helpers.aux :refer [get-sections remove-empty-lines get-part-list normalize-spaces]]
+        [helpers.aux :refer [get-sections remove-empty-lines get-part-list normalize-spaces keys-commands-map strikes-commands-map]]
         [helpers.defs :refer [combos-tree]]
         [clojure.string :as str]))
 
@@ -14,16 +14,6 @@
 
 (defn insert-branche-into-node [node-base node-branch]
     (swap! (:branches node-base) assoc (:key node-branch) node-branch))
-
-(defn keys-commands-map [content]
-    (let [keys (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 0)
-          strikes (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 1)]
-        (zipmap keys strikes)))
-
-(defn strikes-commands-map [content]
-    (let [keys (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 0)
-          strikes (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 1)]
-        (zipmap strikes keys)))
 
 (defn filter-empty-string [list]
     (filter seq list))

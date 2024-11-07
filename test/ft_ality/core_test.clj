@@ -4,6 +4,7 @@
             [helpers.file :refer :all]
             [helpers.tree :refer :all]
             [helpers.monitor :refer :all]
+            [helpers.aux :refer :all]
             [helpers.validator :refer [is-section-separator-valid?,
               is-section-commands-valid?
               is-section-combos-valid?]]))

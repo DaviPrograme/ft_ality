@@ -17,3 +17,13 @@
 (defn get-sections [content]
     (str/split content #"_+"))
 
+(defn keys-commands-map [content]
+    (let [keys (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 0)
+          strikes (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 1)]
+        (zipmap keys strikes)))
+
+(defn strikes-commands-map [content]
+    (let [keys (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 0)
+          strikes (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 1)]
+        (zipmap strikes keys)))
+
