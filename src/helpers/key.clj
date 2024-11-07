@@ -1,5 +1,6 @@
 (ns helpers.key
-  (:require [helpers.defs :refer [commands is-run?]])
+  (:require [helpers.defs :refer [commands is-run?]]
+            [helpers.aux :refer [is-recognized-key?]])
   (:import [javax.swing JFrame JPanel]
            [java.awt.event KeyAdapter KeyEvent]
            [javax.sound.sampled AudioSystem Clip FloatControl]
@@ -26,30 +27,34 @@
     clip))
 
 ;; Função que retorna um listener de teclado
-(defn- key-listener [frame]
+(defn- key-listener [frame keys-map]
   (proxy [KeyAdapter] []
     (keyPressed [e]
-      (let [  key-code (.getKeyCode e)
+      (let [key-code (.getKeyCode e)]
+        (let [key-pressed (KeyEvent/getKeyText key-code)
               time (System/currentTimeMillis)]
-        (swap! commands conj {:key (KeyEvent/getKeyText key-code) :time time})
-        (print-commands commands)
+          (when (is-recognized-key? key-pressed keys-map)
+            (swap! commands conj {:key key-pressed :time time})
+            (print-commands commands)))
         (when (= key-code KeyEvent/VK_ESCAPE)
           (println "Saindo...")
           (.dispose frame)
           (reset! is-run? false)))) ;; Acesso ao frame aqui
     (keyReleased [e]
-      (let [key-code (.getKeyCode e)]
-        (println "Tecla liberada:" (KeyEvent/getKeyText key-code))))))
+      (let [key-code (.getKeyCode e)
+            key-released (KeyEvent/getKeyText key-code)]
+        (when (is-recognized-key? key-released keys-map)
+          (println "Tecla liberada:" (KeyEvent/getKeyText key-code)))))))
 
 ;; Função para criar a janela
-(defn create-frame []
+(defn create-frame [keys-map]
   (let [frame (JFrame. "FT_ALITY")
         panel (proxy [JPanel] []
                 (paintComponent [g]
                   (proxy-super paintComponent g)
                   (.drawImage g (carregar-imagem "./MK_SRC/Mortal-Kombat-3.jpg") 0 0 this)))]
     (.add frame panel)
-    (.addKeyListener frame (key-listener frame)) ;; Passa a referência do frame
+    (.addKeyListener frame (key-listener frame keys-map)) ;; Passa a referência do frame
     (.setSize frame 1200 675)
     (.setVisible frame true)
     (.setDefaultCloseOperation frame JFrame/EXIT_ON_CLOSE)

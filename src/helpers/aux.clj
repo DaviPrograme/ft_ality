@@ -27,3 +27,5 @@
           strikes (get-part-list (remove-empty-lines (nth (get-sections content) 0)) 1)]
         (zipmap strikes keys)))
 
+(defn is-recognized-key? [key keys-map]
+    (not (nil? (get keys-map key))))
