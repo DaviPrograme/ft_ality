@@ -24,6 +24,21 @@
         count
         (recur (inc count) key-focus (drop 1 keys-list) time)))
 
+(defn- set-handle [set-value]
+    (if (= (count set-value) 1) (first set-value) set-value))
+
+(defn handle-commands [new-cmds-list old-cmds-list wait-time]
+    (if (empty? old-cmds-list)
+        new-cmds-list
+        (let [next-cmd (first old-cmds-list)
+              num-keys-pressed-same-time (count-keys-pressed-same-time 0 next-cmd (drop 1 old-cmds-list) wait-time)
+              rest-cmds-list (drop (inc num-keys-pressed-same-time) old-cmds-list)
+              next-command-handled 
+                (if (zero? num-keys-pressed-same-time) 
+                    (str (:key next-cmd)) 
+                    (set-handle (set (map #(str (:key %)) (take (inc num-keys-pressed-same-time) old-cmds-list)))))]
+            (recur (conj new-cmds-list next-command-handled) rest-cmds-list wait-time))))
+
 (defn monitor-commands []
     (while (or @is-run? (not (empty? @commands)))
         (do

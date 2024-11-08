@@ -252,3 +252,42 @@
       (is (= expected4 (count-keys-pressed-same-time 0 key-focus test4 wait-time))))
     (testing "com todos elementos da lista de comandos sendo pressionados juntos" (is (= expected5 (count-keys-pressed-same-time 0 key-focus test5 wait-time))))
     ))
+
+
+(deftest handle-commands-test
+  (let [wait-time 1
+        key-focus {:time 0}
+        test0 []
+        test1 [{:key "A" :time 1}]
+        test2 [{:key "A" :time 1} {:key "A" :time 2}]
+        test3 [{:key "A" :time 1} {:key "A" :time 3}]
+        test4 [{:key "A" :time 1} {:key "B" :time 2}]
+        test5 [{:key "A" :time 1} {:key "B" :time 3}]
+        test6 [{:key "A" :time 1}{:key "A" :time 2}{:key "A" :time 3}{:key "A" :time 4}{:key "A" :time 5}{:key "A" :time 6}{:key "A" :time 7}]
+        test7 [{:key "A" :time 1}{:key "B" :time 2}{:key "C" :time 3}{:key "D" :time 4}{:key "E" :time 5}{:key "F" :time 6}{:key "G" :time 7}]
+        test8 [{:key "A" :time 1}{:key "B" :time 3}{:key "C" :time 5}{:key "D" :time 7}{:key "E" :time 9}{:key "F" :time 11}{:key "G" :time 13}]
+        test9 [{:key "A" :time 1}{:key "B" :time 3}{:key "C" :time 5}{:key "D" :time 6}{:key "E" :time 8}{:key "F" :time 10}{:key "G" :time 12}]
+        test10 [{:key "A" :time 0.1}{:key "A" :time 0.2}{:key "A" :time 0.3}{:key "A" :time 0.4}{:key "A" :time 0.5}{:key "A" :time 0.6}{:key "A" :time 0.7}]
+        expected0 []
+        expected1 ["A"]
+        expected2 ["A"]
+        expected3 ["A" "A"]
+        expected4 [#{"A" "B"}]
+        expected5 ["A" "B"]
+        expected6 ["A" "A" "A" "A"]
+        expected7 [#{"A" "B"} #{"C" "D"} #{"E" "F"} "G"]
+        expected8 ["A" "B" "C" "D" "E" "F" "G"]
+        expected9 ["A" "B" #{"C" "D"} "E" "F" "G"]
+        expected10 ["A"]]
+    (testing "sem elementos na lista de comandos" (is (= expected0 (handle-commands [] test0 wait-time))))
+    (testing "com um elemento na lista" (is (= expected1 (handle-commands [] test1 wait-time))))
+    (testing "com 2 elementos na lista sendo iguais e pressionados juntos" (is (= expected2 (handle-commands [] test2 wait-time))))
+    (testing "com 2 elementos na lista sendo iguais e pressionados separados" (is (= expected3 (handle-commands [] test3 wait-time))))
+    (testing "com 2 elementos na lista sendo diferentes e pressionados juntos" (is (= expected4 (handle-commands [] test4 wait-time))))
+    (testing "com 2 elementos na lista sendo diferentes e pressionados separados" (is (= expected5 (handle-commands [] test5 wait-time))))
+    (testing "com varios elementos iguais" (is (= expected6 (handle-commands [] test6 wait-time))))
+    (testing "com varios elementos diferentes"  (is (= expected7 (handle-commands [] test7 wait-time))))
+    (testing "com varios elementos diferentes mas com apenas 2 sendo pressionados juntos" (is (= expected8 (handle-commands [] test8 wait-time))))
+    (testing "com varios elementos diferentes mas com apenas 2 sendo pressionados separados" (is (= expected9 (handle-commands [] test9 wait-time))))
+    (testing "com varios elementos iguais pressionados juntos" (is (= expected10 (handle-commands [] test10 wait-time))))
+    ))
