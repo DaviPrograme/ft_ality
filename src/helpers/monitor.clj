@@ -1,5 +1,5 @@
 (ns helpers.monitor
-    (:require [helpers.defs :refer [commands combos-tree is-run? mls-sequence-time key-waiting-time]]))
+    (:require [helpers.defs :refer [commands combos-tree is-run? mls-sequence-time mls-tolerance-press-button-time]]))
 
 
 (defn all-commnds-part-sequence? [cmds seq-time]
@@ -72,20 +72,24 @@
                 @(:special next-node))
             (recur next-node rest-strike-list))))
 
+(defn- remove-read-commands [commands-atom count-sequence]
+    (reset! commands-atom (drop count-sequence @commands-atom)))
+
+(defn- print-strikes [keys-map cmds mls-seq-time msl-tolerance-time]
+     (let [count-cmds-sequence (count-commands-next-sequence 0 cmds mls-seq-time)
+           cmds-sequence (take count-cmds-sequence cmds)
+           handle-cmds-sequence (handle-commands [] cmds msl-tolerance-time)
+           is-special? (is-special-combo? @combos-tree handle-cmds-sequence)
+           convert-to-strike (reduce #(str %1 (if (empty? %1) "" ", ") %2) "" (translate-keys-to-strikes keys-map handle-cmds-sequence))]
+        (println "KEYS: " handle-cmds-sequence )
+        (println "STRIKES: " convert-to-strike)
+        (when (not (nil? is-special?))
+            (println "SPECIAL: " is-special?))
+        (print "\n\n")
+        (remove-read-commands commands count-cmds-sequence )))
+
 (defn monitor-commands [keys-map]
     (while (or @is-run? (not (empty? @commands)))
         (let [cmds-list (sort-by :time (wait-end-sequence mls-sequence-time))]
             (when (not (empty? cmds-list))
-                (let [count-cmds-sequence (count-commands-next-sequence 0 cmds-list mls-sequence-time)
-                      cmds-sequence (take count-cmds-sequence cmds-list)
-                      handle-cmds-sequence (handle-commands [] cmds-list key-waiting-time)
-                      is-special? (is-special-combo? @combos-tree handle-cmds-sequence)
-                      convert-to-strike (reduce #(str %1 (if (empty? %1) "" ", ") %2) "" (translate-keys-to-strikes keys-map handle-cmds-sequence))]
-                    ;; (println "ORIGINAL: " cmds-list )
-                    ;; (println "TAKE: " cmds-sequence )
-                    (println "KEYS: " handle-cmds-sequence )
-                    (println "STRIKES: " convert-to-strike)
-                    (when (not (nil? is-special?))
-                        (println "SPECIAL: " is-special?))
-                    (print "\n\n")
-                    (reset! commands (drop count-cmds-sequence @commands)))))))
+                (print-strikes keys-map cmds-list mls-sequence-time mls-tolerance-press-button-time)))))

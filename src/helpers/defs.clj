@@ -9,4 +9,4 @@
 
 (def mls-sequence-time 400)
 
-(def key-waiting-time 100)
+(def mls-tolerance-press-button-time 100)

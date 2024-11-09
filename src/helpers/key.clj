@@ -35,16 +35,18 @@
               time (System/currentTimeMillis)]
           (when (is-recognized-key? key-pressed keys-map)
             (swap! commands conj {:key key-pressed :time time})
-            (print-commands commands)))
+            ;; (print-commands commands)
+          ))
         (when (= key-code KeyEvent/VK_ESCAPE)
           (println "Saindo...")
           (.dispose frame)
           (reset! is-run? false)))) ;; Acesso ao frame aqui
-    (keyReleased [e]
-      (let [key-code (.getKeyCode e)
-            key-released (KeyEvent/getKeyText key-code)]
-        (when (is-recognized-key? key-released keys-map)
-          (println "Tecla liberada:" (KeyEvent/getKeyText key-code)))))))
+    ;; (keyReleased [e]
+    ;;   (let [key-code (.getKeyCode e)
+    ;;         key-released (KeyEvent/getKeyText key-code)]
+    ;;     (when (is-recognized-key? key-released keys-map)
+    ;;       (println "Tecla liberada:" (KeyEvent/getKeyText key-code)))))
+          ))
 
 ;; Função para criar a janela
 (defn create-frame [keys-map]
