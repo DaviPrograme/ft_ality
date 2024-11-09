@@ -1,5 +1,5 @@
 (ns helpers.monitor
-    (:require [helpers.defs :refer [commands is-run? mls-sequence-time key-waiting-time]]))
+    (:require [helpers.defs :refer [commands combos-tree is-run? mls-sequence-time key-waiting-time]]))
 
 
 (defn all-commnds-part-sequence? [cmds seq-time]
@@ -59,7 +59,18 @@
                     ""
                     key) concat-str))
            (get keys-map key "")))
-       keys-list)) 
+       keys-list))
+
+(defn is-special-combo? [tree strike-list]
+    (let [strike-focus (first strike-list)
+          rest-strike-list (drop 1 strike-list)
+          branche (get @(get tree :branches) strike-focus)
+          next-node (if (nil? branche) nil branche)]
+        (if (or (empty? rest-strike-list) (nil? next-node))
+            (if (nil? next-node)
+                nil
+                @(:special next-node))
+            (recur next-node rest-strike-list))))
 
 (defn monitor-commands [keys-map]
     (while (or @is-run? (not (empty? @commands)))
@@ -68,9 +79,13 @@
                 (let [count-cmds-sequence (count-commands-next-sequence 0 cmds-list mls-sequence-time)
                       cmds-sequence (take count-cmds-sequence cmds-list)
                       handle-cmds-sequence (handle-commands [] cmds-list key-waiting-time)
+                      is-special? (is-special-combo? @combos-tree handle-cmds-sequence)
                       convert-to-strike (reduce #(str %1 (if (empty? %1) "" ", ") %2) "" (translate-keys-to-strikes keys-map handle-cmds-sequence))]
                     ;; (println "ORIGINAL: " cmds-list )
                     ;; (println "TAKE: " cmds-sequence )
-                    ;; (println "HANDLE: " handle-cmds-sequence "\n\n")
-                    ;; (println "CONVERT: " convert-to-strike "\n\n")
+                    (println "KEYS: " handle-cmds-sequence )
+                    (println "STRIKES: " convert-to-strike)
+                    (when (not (nil? is-special?))
+                        (println "SPECIAL: " is-special?))
+                    (print "\n\n")
                     (reset! commands (drop count-cmds-sequence @commands)))))))
