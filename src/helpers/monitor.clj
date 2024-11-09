@@ -45,15 +45,32 @@
                     (set-handle (set (map #(str (:key %)) (take (inc num-keys-pressed-same-time) old-cmds-list)))))]
             (recur (conj new-cmds-list next-command-handled) rest-cmds-list wait-time))))
 
-(defn monitor-commands []
+(defn- remove-ending-str [string end-str]
+    (subs string 0 (- (count string) (count end-str))))
+
+
+(defn- translate-keys-to-strikes [keys-map keys-list]
+     (map (fn [key]
+         (if (set? key)
+            (let [concat-str " + "]
+            (remove-ending-str
+                (reduce (fn [acc el]
+                    (str acc (get keys-map el "") concat-str))
+                    ""
+                    key) concat-str))
+           (get keys-map key "")))
+       keys-list)) 
+
+(defn monitor-commands [keys-map]
     (while (or @is-run? (not (empty? @commands)))
-        (do
-            (let [cmds-list (sort-by :time (wait-end-sequence mls-sequence-time))]
-                (when (not (empty? cmds-list))
-                    (let [count-cmds-sequence (count-commands-next-sequence 0 cmds-list mls-sequence-time)
-                          cmds-sequence (take count-cmds-sequence cmds-list)
-                          handle-cmds-sequence (handle-commands [] cmds-list key-waiting-time)]
-                        ;; (println "ORIGINAL: " cmds-list )
-                        ;; (println "TAKE: " cmds-sequence )
-                        ;; (println "HANDLE: " handle-cmds-sequence "\n\n")
-                        (reset! commands (drop count-cmds-sequence @commands))))))))
+        (let [cmds-list (sort-by :time (wait-end-sequence mls-sequence-time))]
+            (when (not (empty? cmds-list))
+                (let [count-cmds-sequence (count-commands-next-sequence 0 cmds-list mls-sequence-time)
+                      cmds-sequence (take count-cmds-sequence cmds-list)
+                      handle-cmds-sequence (handle-commands [] cmds-list key-waiting-time)
+                      convert-to-strike (reduce #(str %1 (if (empty? %1) "" ", ") %2) "" (translate-keys-to-strikes keys-map handle-cmds-sequence))]
+                    ;; (println "ORIGINAL: " cmds-list )
+                    ;; (println "TAKE: " cmds-sequence )
+                    ;; (println "HANDLE: " handle-cmds-sequence "\n\n")
+                    ;; (println "CONVERT: " convert-to-strike "\n\n")
+                    (reset! commands (drop count-cmds-sequence @commands)))))))
