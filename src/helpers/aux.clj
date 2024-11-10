@@ -1,6 +1,7 @@
 (ns helpers.aux
     (:require 
-        [clojure.string :as str]))
+        [clojure.string :as str]
+        [helpers.defs :refer [red-color white-color]]))
 
 
 (defn remove-empty-lines [text]
@@ -27,3 +28,6 @@
 
 (defn is-recognized-key? [key keys-map]
     (not (nil? (get keys-map key))))
+
+(defn error-msg [msg]
+    (println (str red-color "ERROR: " white-color msg)))
