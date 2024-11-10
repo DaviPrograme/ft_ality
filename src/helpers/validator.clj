@@ -6,6 +6,7 @@
                 remove-empty-lines
                 get-part-list
                 get-sections
+                error-msg
             ]
         ]
         [clojure.string :as str]
@@ -23,21 +24,21 @@
                     true
                     (do (when print-error?
                             (if (= (count lines-with-separator) (count lines-with-others-chars ))
-                                (print "não foi encontrado a linhha separaadora de seções")
-                                (print "o underline deve ser usado apenas na linha separadora de seções")))
+                                (error-msg "The section separator line was not found.")
+                                (error-msg "The underscore should only be used in the section separator line.")))
                         false))))
 
-(defn- empty-command-section-error? [section, print-error?]
+(defn- empty-command-section-error? [section, section-name, print-error?]
     (if (empty? section)
         (do (when print-error?
-                (print "não foi encontrado a seçãoo dos coomandos basicos"))
+                (error-msg (str "The " section-name " section was not found")))
             false)
         true))
 
 (defn- command-section-no-content-error? [lines, print-error?]
     (if (zero? (count lines))
                 (do (when print-error?
-                        (print "não foi encontrado conteudo na seção dos comandos basicos"))
+                        (error-msg "No content was found in the basic commands section."))
                     false)
                 true))
 
@@ -47,7 +48,7 @@
 (defn all-lines-have-just-one-dash? [lines, print-error?]
     (if (some #(= % false) (map single-dash? lines))
         (do (when print-error?
-                (print "todas as linhas com conteudo devem ter apenas um dash"))
+                (error-msg "All lines with content should have only one dash."))
             false)
         true))
 
@@ -61,7 +62,7 @@
     (if (zero? (count (filter #(not (or (is-char? %) (is-special-key? %))) keys)))
         true
         (do (when print-error?
-                (print "as teclas validas são apenas oo alfabeto e aquelas que representam o 'Space', 'Up', 'Down' 'Right' e 'Left'."))
+                (error-msg "The only valid keys are letters and those representing 'Space', 'Up', 'Down', 'Right,' and 'Left'."))
             false)))
 
 (defn repeated-keys? [keys, print-error?]
@@ -69,7 +70,7 @@
         (if (= (count keys) (count set-keys))
             true
             (do (when print-error?
-                (print "uma tecla só pode represesentar apenas um golpe"))
+                (error-msg "A key can only represent a single strike."))
             false))))
 
 
@@ -78,7 +79,7 @@
         (if (= (count strikes) (count set-strikes))
             true
             (do (when print-error?
-                (print "um golpe só pode ser executado por apenas uma tecla"))
+                (error-msg "A strike can only be executed by a single key."))
             false))))
 
 (defn is-section-commands-valid? [content, print-error?]
@@ -87,7 +88,7 @@
          keys-list (get-part-list lines-with-content-list 0)
          strikes-list (get-part-list lines-with-content-list 1)]
          (and
-            (empty-command-section-error? section-commands, print-error?) 
+            (empty-command-section-error? section-commands, "basic commands" ,print-error?)
             (command-section-no-content-error? lines-with-content-list print-error?)
             (all-lines-have-just-one-dash? lines-with-content-list print-error?)
             (keys-recognized? keys-list print-error?)
@@ -98,7 +99,7 @@
 (defn all-combo-names-have-content? [lines, print-error?]
     (if (some #(= % true) (map #(empty? %) lines))
         (do (when print-error?
-                (print "todos os combos precisam ter um nome"))
+                (error-msg "All combos need to have a name."))
             false)
         true))
 
@@ -111,7 +112,7 @@
          (if (zero? (count diff))
             true
             (do (when print-error?
-                    (print "os seguintes golpes nãoo foram cadastrados: " diff))
+                    (error-msg (str "The following strikes have not been registered: " diff)))
                 false))))
 
 (defn is-section-combos-valid? [content, print-error?]
@@ -122,7 +123,7 @@
          combos (get-part-list lines-with-content-list 1)
          strikes (combos-to-strikes combos)]
          (and
-            (empty-command-section-error? section-combos, print-error?) 
+            (empty-command-section-error? section-combos, "combo" ,print-error?)
             (command-section-no-content-error? lines-with-content-list print-error?)
             (all-lines-have-just-one-dash? lines-with-content-list print-error?)
             (all-combo-names-have-content? combos-name print-error?)
