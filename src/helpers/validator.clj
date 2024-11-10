@@ -1,8 +1,8 @@
 (ns helpers.validator
-    (:require 
+    (:require
+        [helpers.defs :refer [special-keys]]
         [helpers.file :refer [get-content-file]]
         [helpers.aux :refer [
-                special-keys
                 remove-empty-lines
                 get-part-list
                 get-sections

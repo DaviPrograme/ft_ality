@@ -3,8 +3,6 @@
         [clojure.string :as str]))
 
 
-(def special-keys #{"UP", "DOWN", "RIGHT", "LEFT", "SPACE"})
-
 (defn remove-empty-lines [text]
     (->> (str/split-lines text) (map str/trim) (remove empty?)))
 

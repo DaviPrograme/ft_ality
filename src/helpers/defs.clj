@@ -1,5 +1,6 @@
 (ns helpers.defs)
 
+(def special-keys #{"UP", "DOWN", "RIGHT", "LEFT", "SPACE"})
 
 (def commands (atom []))
 
