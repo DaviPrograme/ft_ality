@@ -1,5 +1,6 @@
 (ns helpers.monitor
-    (:require [helpers.defs :refer [commands combos-tree is-run? mls-sequence-time mls-tolerance-press-button-time]]))
+    (:require [helpers.defs.atoms :refer [commands combos-tree is-run?]]
+              [helpers.defs.constants :refer [mls-sequence-time mls-tolerance-press-button-time]]))
 
 
 (defn all-commnds-part-sequence? [cmds seq-time]

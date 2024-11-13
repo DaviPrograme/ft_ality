@@ -1,5 +1,5 @@
 (ns helpers.key
-  (:require [helpers.defs :refer [commands is-run?]]
+  (:require [helpers.defs.atoms :refer [commands is-run?]]
             [helpers.aux :refer [is-recognized-key?]])
   (:import [javax.swing JFrame JPanel]
            [java.awt.event KeyAdapter KeyEvent]

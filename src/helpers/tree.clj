@@ -1,7 +1,7 @@
 (ns helpers.tree 
     (:require 
         [helpers.aux :refer [get-sections remove-empty-lines get-part-list normalize-spaces keys-commands-map strikes-commands-map]]
-        [helpers.defs :refer [combos-tree]]
+        [helpers.defs.atoms :refer [combos-tree]]
         [clojure.string :as str]))
 
 

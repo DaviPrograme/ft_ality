@@ -1,6 +1,6 @@
 (ns helpers.validator
     (:require
-        [helpers.defs :refer [special-keys]]
+        [helpers.defs.constants :refer [special-keys]]
         [helpers.file :refer [get-content-file]]
         [helpers.aux :refer [
                 remove-empty-lines

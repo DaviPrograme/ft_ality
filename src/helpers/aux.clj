@@ -1,7 +1,7 @@
 (ns helpers.aux
     (:require 
         [clojure.string :as str]
-        [helpers.defs :refer [red-color white-color]]))
+        [helpers.defs.constants :refer [red-color white-color]]))
 
 
 (defn remove-empty-lines [text]
