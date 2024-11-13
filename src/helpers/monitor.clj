@@ -18,7 +18,7 @@
 (defn wait-end-sequence [seq-time]
     (let [cmds-now-list @commands
           now-time-millis (System/currentTimeMillis)
-          last-element-part? (<= (Math/abs (- now-time-millis (get (last cmds-now-list) :time 0))) (* 4 seq-time))
+          last-element-part? (<= (Math/abs (- now-time-millis (get (last cmds-now-list) :time 0))) (* 2 seq-time))
           empty-list? (empty? cmds-now-list)]
         (if (not (and @is-run? (or (empty? cmds-now-list) last-element-part?)))
             cmds-now-list
