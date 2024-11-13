@@ -14,11 +14,11 @@
   (print "\n\n"))
 
 
-(defn carregar-imagem [caminho-imagem]
+(defn upload-image [caminho-imagem]
   (.getImage (Toolkit/getDefaultToolkit) caminho-imagem))
 
 ;; Função para tocar uma música em loop
-(defn tocar-musica [caminho-musica]
+(defn play-music [caminho-musica]
   (let [audio-file (File. caminho-musica)
         audio-stream (AudioSystem/getAudioInputStream audio-file)
         clip (AudioSystem/getClip)]
@@ -54,10 +54,10 @@
         panel (proxy [JPanel] []
                 (paintComponent [g]
                   (proxy-super paintComponent g)
-                  (.drawImage g (carregar-imagem "./MK_SRC/Mortal-Kombat-3.jpg") 0 0 this)))]
+                  (.drawImage g (upload-image "./MK_SRC/Mortal-Kombat-3.jpg") 0 0 this)))]
     (.add frame panel)
     (.addKeyListener frame (key-listener frame keys-map)) ;; Passa a referência do frame
     (.setSize frame 1200 675)
     (.setVisible frame true)
     (.setDefaultCloseOperation frame JFrame/EXIT_ON_CLOSE)
-    (tocar-musica "./MK_SRC/music.wav")))
+    (play-music "./MK_SRC/music.wav")))
