@@ -9,10 +9,10 @@
 (defn- have-more-elements-added? [cmds-now cmds-old]
     (not (= (count cmds-now) (count cmds-old))))
 
-(defn count-commands-next-sequence [index cmds-list seq-time]
-    (if (or (>= (inc index) (count cmds-list)) (> (Math/abs (- (:time (nth cmds-list (inc index))) (:time (nth cmds-list index)))) seq-time))
-        (inc index)
-        (recur (inc index) cmds-list seq-time)))
+(defn count-commands-next-sequence [len-seq cmds-list seq-time]
+    (if (or (>= (inc len-seq) (count cmds-list)) (> (Math/abs (- (:time (nth cmds-list (inc len-seq))) (:time (nth cmds-list len-seq)))) seq-time))
+        (inc len-seq)
+        (recur (inc len-seq) cmds-list seq-time)))
 
 
 (defn wait-end-sequence [seq-time]
