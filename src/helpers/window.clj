@@ -1,4 +1,4 @@
-(ns helpers.key
+(ns helpers.window
   (:require [helpers.defs.atoms :refer [commands is-run?]]
             [helpers.aux :refer [is-recognized-key?]])
   (:import [javax.swing JFrame JPanel]

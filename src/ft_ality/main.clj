@@ -3,7 +3,7 @@
   (:require
     [helpers.aux :refer [keys-commands-map]] 
     [helpers.file :refer [check-path get-content-file]]
-    [helpers.key :refer [create-frame]]
+    [helpers.window :refer [create-frame]]
     [helpers.tree :refer [build-tree]]
     [helpers.monitor :refer [monitor-commands]]
     [helpers.validator :refer [is-file-grammar-valid?]]))
