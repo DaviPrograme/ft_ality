@@ -3,9 +3,9 @@
             [helpers.aux :refer [is-recognized-key?]])
   (:import [javax.swing JFrame JPanel]
            [java.awt.event KeyAdapter KeyEvent]
-           [javax.sound.sampled AudioSystem Clip FloatControl]
+           [javax.sound.sampled AudioSystem Clip]
            [java.io File]
-           [java.awt Graphics Toolkit]))
+           [java.awt Toolkit]))
 
 
 (defn print-commands [commands]
