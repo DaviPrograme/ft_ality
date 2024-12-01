@@ -40,13 +40,7 @@
         (when (= key-code KeyEvent/VK_ESCAPE)
           (println "Saindo...")
           (.dispose frame)
-          (reset! is-run? false)))) ;; Acesso ao frame aqui
-    ;; (keyReleased [e]
-    ;;   (let [key-code (.getKeyCode e)
-    ;;         key-released (KeyEvent/getKeyText key-code)]
-    ;;     (when (is-recognized-key? key-released keys-map)
-    ;;       (println "Tecla liberada:" (KeyEvent/getKeyText key-code)))))
-          ))
+          (reset! is-run? false))))))
 
 ;; Função para criar a janela
 (defn create-frame [keys-map]
