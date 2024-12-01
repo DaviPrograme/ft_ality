@@ -1,5 +1,6 @@
 (ns helpers.file
-    (:require [clojure.java.io :as io]))
+    (:require [clojure.java.io :as io]
+              [helpers.aux :refer [error-msg]]))
 
 (defn path-exists? [path]
   (.exists (io/file path)))
@@ -12,8 +13,8 @@
   (if (path-exists? path) 
     (if (is-file? path)
       true
-      (print "error: não é um arquivo"))
-    (print "error: arquivo não encontrado")))
+      (error-msg "It is not a file."))
+    (error-msg "File not found.")))
 
 (defn get-content-file [path]
   (slurp path))
