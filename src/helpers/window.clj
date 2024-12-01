@@ -38,7 +38,7 @@
             ;; (print-commands commands)
           ))
         (when (= key-code KeyEvent/VK_ESCAPE)
-          (println "Saindo...")
+          (println "Exit...")
           (.dispose frame)
           (reset! is-run? false))))))
 
