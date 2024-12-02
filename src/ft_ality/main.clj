@@ -1,7 +1,7 @@
 (ns ft-ality.main
   (:gen-class)
   (:require
-    [helpers.aux :refer [keys-commands-map]] 
+    [helpers.aux :refer [keys-commands-map error-msg]]
     [helpers.file :refer [check-path get-content-file]]
     [helpers.window :refer [create-frame]]
     [helpers.tree :refer [build-tree]]
@@ -10,7 +10,6 @@
 
 
 (defn -main
-  "I don't do a whole lot ... yet."
   [& args]
   (if (= 1 (count args))
     (when (and (not (nil? (check-path (last args)))) (is-file-grammar-valid? (last args)))
@@ -19,4 +18,4 @@
           (build-tree content)
           (create-frame keys-map)
           (monitor-commands keys-map)))
-    (print "quantidade de parametros errada")))
+    (error-msg "Program expects to receive a valid grammar file.")))
