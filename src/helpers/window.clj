@@ -34,7 +34,7 @@
         (let [key-pressed (KeyEvent/getKeyText key-code)
               time (System/currentTimeMillis)]
           (when (is-recognized-key? key-pressed keys-map)
-            (swap! commands conj {:key key-pressed :time time})
+            (swap! commands concat [{:key key-pressed :time time}])
             ;; (print-commands commands)
           ))
         (when (= key-code KeyEvent/VK_ESCAPE)

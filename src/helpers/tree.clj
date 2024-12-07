@@ -33,7 +33,10 @@
         (when (not (contains? @(:branches node) strike-now ))
             (insert-branche-into-node node new-node))
         (when (empty? rest-strikes-list)
-            (reset! (:special (get @(:branches node) strike-now)) combo-name))
+            (let [special (:special (get @(:branches node) strike-now))]
+                (if (nil? @special)
+                    (reset! special combo-name)
+                    (reset! special (str @special ", " combo-name)))))
         (when (not (empty? rest-strikes-list))
             (recur (get @(:branches node) strike-now) combo-name rest-strikes-list))))
 

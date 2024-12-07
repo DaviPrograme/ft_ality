@@ -18,12 +18,12 @@
 (defn wait-end-sequence [seq-time]
     (let [cmds-now-list @commands
           now-time-millis (System/currentTimeMillis)
-          last-element-part? (<= (Math/abs (- now-time-millis (get (last cmds-now-list) :time 0))) (* 2 seq-time))
+          last-element-part? (<= (Math/abs (- now-time-millis (get (last cmds-now-list) :time 0)))  seq-time)
           empty-list? (empty? cmds-now-list)]
         (if (not (and @is-run? (or (empty? cmds-now-list) last-element-part?)))
             cmds-now-list
             (do
-                (Thread/sleep seq-time)
+                (Thread/sleep (* 4 seq-time))
                 (recur seq-time)))))
 
 (defn count-keys-pressed-same-time [count key-focus keys-list time]
@@ -91,6 +91,6 @@
 
 (defn monitor-commands [keys-map]
     (while (or @is-run? (not (empty? @commands)))
-        (let [cmds-list (sort-by :time (wait-end-sequence mls-sequence-time))]
+        (let [cmds-list (wait-end-sequence mls-sequence-time)]
             (when (not (empty? cmds-list))
                 (print-strikes keys-map cmds-list mls-sequence-time mls-tolerance-press-button-time)))))
