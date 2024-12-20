@@ -38,7 +38,7 @@ No contexto deste projeto, os autômatos finitos são usados para reconhecer seq
 ## 🛠️ Tecnologias
 
 * [Clojure](https://clojure.org/) - Linguagem de programação
-* [Leinigen]([https://www.gnu.org/software/make](https://leiningen.org/)) - Ferramenta de Gerenciamento de projetos
+* [Leinigen](https://leiningen.org/) - Ferramenta de Gerenciamento de projetos
 
 ## como Executar
 
